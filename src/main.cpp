@@ -1,13 +1,12 @@
 #include "renderer.h"
 
 #include <exception>
-#include <fstream>
-#include <iostream>
+#include <fmt/core.h>
 #include <span>
 
-void parse_arguments(const auto &args) {
+void parse_arguments(const std::span<const char *> &args) {
   for (auto const &arg : args) {
-    std::cout << arg << '\n';
+    fmt::print(stderr, "{}\n", arg);
   }
 }
 
@@ -21,10 +20,10 @@ int main(int argc, const char *argv[]) {
     auto renderer = engine::renderer();
     renderer.init();
 
-    std::cerr << "Initialization completed.\n";
+    fmt::print(stderr, "Initialization completed.\n");
 
     renderer.main_loop();
   } catch (const std::exception &e) {
-    std::cerr << "Error initializing rendering engine: " << e.what() << '\n';
+    fmt::print(stderr, "Error initializing rendering engine: {}\n", e.what());
   }
 }

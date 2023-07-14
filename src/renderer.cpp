@@ -37,15 +37,12 @@ GLFWwindow *init_window() {
 }
 
 constexpr bool check_validation_layers(const auto &validation_layers) {
-  return std::all_of(debug_validation_layers.begin(),
-                     debug_validation_layers.end(), [&](auto requested) {
-                       return std::any_of(
-                           validation_layers.begin(), validation_layers.end(),
-                           [&](auto layer) {
-                             return std::strcmp(requested, layer.layerName) ==
-                                    0;
-                           });
-                     });
+  auto compare_string = [&](std::string_view requested) {
+    return std::ranges::any_of(validation_layers, [&](auto layer) {
+      return requested == layer.layerName;
+    });
+  };
+  return std::ranges::all_of(debug_validation_layers, compare_string);
 }
 
 vk::Instance init_instance(bool debug_mode) {
