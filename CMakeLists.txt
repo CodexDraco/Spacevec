@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #find_package(doctest)
 find_package(Vulkan REQUIRED)
+find_package(fmt REQUIRED)
+find_package(glfw3 3.3 REQUIRED)
 
 add_custom_command(
   OUTPUT vertex.spv
@@ -21,4 +23,4 @@ add_custom_command(
 
 add_executable(${PROJECT_NAME} src/main.cpp src/renderer.cpp vertex.spv fragment.spv)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw Vulkan::Vulkan fmt::fmt)
