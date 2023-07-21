@@ -1,6 +1,9 @@
 [requires]
-fmt/10.0.0
+fmt/9.1.0
 glfw/3.3.8
+vulkan-headers/1.3
+vulkan-loader/1.3
+vulkan-validation-layers/1.3
 
 [generators]
 CMakeDeps

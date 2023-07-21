@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.25)
 project(Spacevec CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -11,13 +11,13 @@ find_package(glfw3 3.3 REQUIRED)
 
 add_custom_command(
   OUTPUT vertex.spv
-  COMMAND glslc ${CMAKE_CURRENT_SOURCE_DIR}/assets/vertex.glsl -o vertex.spv
+  COMMAND Vulkan::glslc ${CMAKE_CURRENT_SOURCE_DIR}/assets/vertex.glsl -o vertex.spv
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/assets/vertex.glsl
   VERBATIM)
 
 add_custom_command(
   OUTPUT fragment.spv
-  COMMAND glslc ${CMAKE_CURRENT_SOURCE_DIR}/assets/fragment.glsl -o fragment.spv
+  COMMAND Vulkan::glslc ${CMAKE_CURRENT_SOURCE_DIR}/assets/fragment.glsl -o fragment.spv
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/assets/fragment.glsl
   VERBATIM)
 
