@@ -1,45 +1,67 @@
-#define VULKAN_HPP_NO_CONSTRUCTORS
-#include <vulkan/vulkan.hpp>
-#include <vulkan/vulkan_handles.hpp>
+#include <glm/glm.hpp>
 
-#define GLFW_INCLUDE_VULKAN
+#include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 
-namespace engine {
-class renderer {
-public:
-  renderer();
-  ~renderer();
+#include <VkBootstrap.h>
+#include <vulkan/vulkan_core.h>
 
-  void init();
-  void main_loop();
-  void draw_frame();
+#include <string>
+
+namespace spacevec {
+struct VkData {
+    GLFWwindow* window;
+    vkb::Instance instance;
+    vkb::InstanceDispatchTable inst_disp;
+    VkSurfaceKHR surface;
+    vkb::PhysicalDevice physical_device;
+    vkb::Device device;
+    vkb::DispatchTable disp;
+    vkb::Swapchain swapchain;
+};
+
+struct RenderData {
+    VkQueue graphics_queue;
+    VkQueue present_queue;
+
+    std::vector<VkImage> swapchain_images;
+    std::vector<VkImageView> swapchain_image_views;
+    std::vector<VkFramebuffer> framebuffers;
+
+    VkRenderPass render_pass;
+    VkPipelineLayout pipeline_layout;
+    VkPipeline graphics_pipeline;
+
+    std::vector<VkBuffer> vertex_buffers;
+    std::vector<VkDeviceMemory> vertex_buffers_memory;
+
+    VkCommandPool command_pool;
+    std::vector<VkCommandBuffer> command_buffers;
+
+    std::vector<VkSemaphore> available_semaphores;
+    std::vector<VkSemaphore> finished_semaphore;
+    std::vector<VkFence> in_flight_fences;
+    std::vector<VkFence> image_in_flight;
+    size_t current_frame = 0;
+};
+
+struct init_result {
+    std::string message;
+    VkResult result;
+    bool status;
+
+    [[nodiscard]] constexpr static init_result ok() { return { .status = true }; };
+    explicit operator bool() const { return status; }
+  };
+
+class Renderer {
+public:
+    [[nodiscard]] init_result init();
+    [[nodiscard]] init_result main_loop();
+    void destroy();
 
 private:
-  GLFWwindow *m_window;
-  vk::Instance m_instance;
-  // vk::DebugUtilsMessengerEXT m_debug_messenger;
-  vk::SurfaceKHR m_surface;
-  vk::PhysicalDevice m_physical_device;
-  uint32_t m_graphics_queue_index;
-  vk::Device m_device;
-  vk::SwapchainKHR m_swapchain;
-  vk::Queue m_graphics_queue;
-  std::vector<vk::Image> m_swapchain_images;
-  vk::SurfaceFormatKHR m_swapchain_surface_format;
-  vk::Extent2D m_swapchain_extent;
-  std::vector<vk::ImageView> m_swapchain_image_views;
-  vk::ShaderModule m_vertex_shader_module;
-  vk::ShaderModule m_fragment_shader_module;
-  vk::RenderPass m_render_pass;
-  vk::PipelineLayout m_pipeline_layout;
-  vk::Pipeline m_pipeline;
-  std::vector<vk::Framebuffer> m_swapchain_framebuffers;
-  vk::CommandPool m_command_pool;
-  std::vector<vk::CommandBuffer> m_command_buffers;
-  // Sync stuff
-  vk::Semaphore m_image_semaphore;
-  vk::Semaphore m_render_semaphore;
-  vk::Fence m_inflight_fence;
+    VkData vk_data;
+    RenderData render_data;
 };
-} // namespace engine
+} // namespace spacevec

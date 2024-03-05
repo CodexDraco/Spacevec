@@ -29,6 +29,6 @@ add_custom_command(
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/assets/fragment.glsl
   VERBATIM)
 
-add_executable(${PROJECT_NAME} src/main.cpp vertex.spv fragment.spv)
+add_executable(${PROJECT_NAME} src/main.cpp src/renderer.cpp src/renderer.h vertex.spv fragment.spv)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw Vulkan::Vulkan fmt::fmt vk-bootstrap::vk-bootstrap)
